@@ -1,0 +1,1 @@
+powershell -ExecutionPolicy Unrestricted -file fortify.ps1
