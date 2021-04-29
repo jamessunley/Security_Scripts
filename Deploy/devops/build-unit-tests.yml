@@ -1,0 +1,62 @@
+# Build run and publish the results of unit tests
+steps:
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core SDK 3.1.101'
+    inputs:
+      version: 3.1.101
+  - task: NuGetToolInstaller@1
+    displayName: 'Use NuGet 5.4.0'
+    inputs:
+      versionSpec: 5.4.0
+  - task: NuGetCommand@2
+    displayName: 'NuGet restore'
+    inputs:
+      command: custom
+      arguments: 'restore src\projName.sln -MSBuildVersion 16.4'
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet restore'
+    inputs:
+      command: restore
+      projects: '**/*.sln'
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet build'
+    inputs:
+      projects: '**/*.sln'
+      arguments: '-c Release'
+  - task: PowerShell@2
+    displayName: 'Start Local DynamoDb PowerShell Script'
+    inputs:
+      targetType: filePath
+      filePath: ./src/Dependencies/Build/StartLocalDynamoDb.ps1
+  - task: DeleteFiles@1
+    displayName: 'Delete BuildReports from $(Build.SourcesDirectory)\src\'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)\src\'
+      Contents: BuildReports
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet test'
+    inputs:
+      command: test
+      projects: '**/*Tests/*.csproj'
+      arguments: '--configuration $(BuildConfiguration) --logger trx --collect:"Code Coverage" /p:CollectCoverage=true /p:Exclude="[xunit.*]*" /p:Include="[COMPANYNAMEVARIABLE.*]*" /p:CopyLocalLockFileAssemblies=true /p:CoverletOutput=$(Build.SourcesDirectory)\src\BuildReports\Coverage\ "-p:CoverletOutputFormat=\"cobertura,json\"" /p:MergeWith=$(Build.SourcesDirectory)\src\BuildReports\Coverage\coverage.json'
+      publishTestResults: false
+  - task: PowerShell@2
+    displayName: 'Stop Local DynamoDb PowerShell Script'
+    inputs:
+      targetType: filePath
+      filePath: ./src/Dependencies/Build/StopLocalDynamoDb.ps1
+    condition: succeededOrFailed()
+  - task: PublishTestResults@2
+    displayName: 'Publish Test Results **/*Tests.xml **/*.trx'
+    inputs:
+      testResultsFormat: XUnit
+      testResultsFiles: |
+        **/*Tests.xml
+        **/*.trx
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish code coverage from $(Build.SourcesDirectory)\src\BuildReports\Coverage'
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: '$(Build.SourcesDirectory)\src\BuildReports\Coverage\coverage.cobertura.xml'
+      failIfCoverageEmpty: true
+    condition: succeededOrFailed()

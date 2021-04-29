@@ -1,0 +1,12 @@
+# Release pipeline
+pool:
+  name: 'BUILD_POOL_NAME'
+trigger: none
+pr: none
+steps:
+  - checkout: self
+    clean: true
+    persistCredentials: true
+  - template: ../templates/projName-update-build-version.yml
+  - template: ../templates/projName-build-unit-tests.yml
+  - template: ../templates/projName-package-publish-artifacts.yml

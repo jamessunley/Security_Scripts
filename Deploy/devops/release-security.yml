@@ -1,0 +1,30 @@
+# Release security pipeline
+schedules:
+- cron: "0 5 * * 6"
+  displayName: Saturday build
+  branches:
+    include:
+    - develop
+pool:
+  name: 'BUILD_POOL_NAME'
+trigger: none
+pr: none
+steps:
+  - template: ../templates/projName-build-unit-tests.yml
+  - task: PowerShell@2
+    displayName: 'Run OWASP Dependency Checker PowerShell Script'
+    inputs:
+      targetType: filePath
+      filePath: ./src/Testing/Security/OWASPDependencyChecker/Scripts/DependencyChecker.ps1
+  - task: InstallFortifySCA@3
+    displayName: 'Install SCA on agent'
+    inputs:
+      InstallerPath: 'C:\Users\tfsbuild\Fortify\Fortify_SCA_and_Apps_18.20_Windows\Fortify_SCA_and_Apps_18.20_windows_x64.exe'
+      VS2017: true
+      LicenseFile: 'C:\Users\tfsbuild\Fortify\Fortify_SCA_and_Apps_18.20_Windows\fortify.license'
+      RunFortifyRulepackUpdate: true
+  - task: PowerShell@2
+    displayName: 'Run Fortify PowerShell Script '
+    inputs:
+      targetType: filePath
+      filePath: ./src/Testing/Security/StaticAnalysis/Fortify/FortifyScript.ps1
