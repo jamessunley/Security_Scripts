@@ -37,7 +37,7 @@ Write-Output $workingFolder
 iex "C:\dependency-check\bin\dependency-check.bat --project `"$PROJECT`" --scan `"$SCAN`" --suppression `"$workingFolder$SUPPRESSION`" $EX --out `"$workingFolder$OUT`" -f $HTML"
 "Scan 1 produced an HTML file - use this file to easily see dependency flaws"
 
-#Scan 2 - XML file, to be uploaded to ThreadFix
+#Scan 2 - XML file, to be uploaded to tools
 "Started Scan 2"
 iex "C:\dependency-check\bin\dependency-check.bat --project `"$PROJECT`" --scan `"$SCAN`" --suppression `"$workingFolder$SUPPRESSION`" $EX --out `"$workingFolder$OUT`" -f $XML"
 "Scan 2 produced XML file - use this file to upload results to ThreadFix"
