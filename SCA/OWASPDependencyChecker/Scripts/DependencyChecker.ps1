@@ -43,11 +43,3 @@ iex "C:\dependency-check\bin\dependency-check.bat --project `"$PROJECT`" --scan 
 "Scan 2 produced XML file - use this file to upload results to ThreadFix"
 
 "OWASP dependency scan complete"
-
-#Upload to ThreadFix
-"Uploading to ThreadFix"
-
-#Key and address to upload to ThreadFix
-iex "java -jar $workingFolder\ThreadFix\tfcli.jar --set key APIKEY"
-iex "java -jar $workingFolder\ThreadFix\tfcli.jar --set url THREADFIXURL"
-iex "java -jar $workingFolder\ThreadFix\tfcli.jar --upload 223 $workingFolder\OWASPDependencyChecker\Reports\dependency-check-report.xml"
