@@ -16,18 +16,24 @@ class DependencyCheck:
     exclusionsList = ""
     dependencyCheckLocation = "C:/Users/JamesSunley/Documents/dependency-check-6.2.2-release/dependency-check/bin/dependency-check.bat"
 
+    #Set variables
+    projectId = input("Enter project ID: ")
+    locationToScan = input("Specify the location to scan: ")
+    supressionFile = input("Set the suppression file: ")
+    outputLocation = input("Set the output location: ")
+        
     #Sets a list of folders and files to exclude
     def Exclusions():
         exclusions = "\Tests\**"
         return exclusions
 
-    def Scan(locationToScan, supressionFile, outputLocation, exclusionsList, dependencyCheckLocation, os):
+    def Scan(locationToScan, supressionFile, outputLocation, exclusionsList, dependencyCheckLocation, projectId, os):
             print("Starting Scan")
             print("Folder to scan: " + locationToScan)
             print("Report will be output to: " + outputLocation)
-            stream = os.popen(dependencyCheckLocation + ' --project `"projectId`" --scan `"locationToScan`" --suppression `"supressionFile`" exclusionsList --out `"outputLocation`" -f HTML')
+            stream = os.popen(dependencyCheckLocation + ' --project ' + projectId + ' --scan ' + locationToScan + ' --suppression ' + supressionFile + ' --exclude ' + exclusionsList + ' --out ' + outputLocation + ' -f HTML')
             output = stream.read()
             print(output)
 
     exclusionsList = Exclusions()
-    Scan(locationToScan, supressionFile, outputLocation, exclusionsList, dependencyCheckLocation, os)
+    Scan(locationToScan, supressionFile, outputLocation, exclusionsList, dependencyCheckLocation, projectId, os)
