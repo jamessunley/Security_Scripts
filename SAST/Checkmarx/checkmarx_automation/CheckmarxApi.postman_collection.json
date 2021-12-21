@@ -1,0 +1,394 @@
+{
+	"info": {
+		"_postman_id": "c8b50a5d-3d58-47be-b687-f74f7a93c73c",
+		"name": "CheckmarxApi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetAuthToken(bearer)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.environment.set(\"Bearer\", jsonData[\"access_token\"]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "{{Username}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{Password}}",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "scope",
+							"value": "sast_rest_api",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "resource_owner_client",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "014DF517-39D1-4453-B7B3-9930C563627C",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{BaseURL}}auth/identity/connect/token",
+					"host": [
+						"{{BaseURL}}auth"
+					],
+					"path": [
+						"identity",
+						"connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllProjects",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Bearer}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json;v=1.0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseURL}}projects",
+					"host": [
+						"{{BaseURL}}projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllTeams",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Bearer}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json;v=1.0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseURL}}auth/teams",
+					"host": [
+						"{{BaseURL}}auth"
+					],
+					"path": [
+						"teams"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetProjectById",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Bearer}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json;v=1.0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{BaseURL}}projects/111",
+					"host": [
+						"{{BaseURL}}projects"
+					],
+					"path": [
+						"111"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllScans",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Bearer}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json;v=1.0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "{{BaseURL}}sast/scans",
+					"host": [
+						"{{BaseURL}}sast"
+					],
+					"path": [
+						"scans"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllScansForProject",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Bearer}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json;v=1.0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseURL}}sast/scans?projectId=111",
+					"host": [
+						"{{BaseURL}}sast"
+					],
+					"path": [
+						"scans"
+					],
+					"query": [
+						{
+							"key": "projectId",
+							"value": "111"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetLastScanForProject",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Bearer}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json;v=1.0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseURL}}sast/scans?projectId=111&last=1",
+					"host": [
+						"{{BaseURL}}sast"
+					],
+					"path": [
+						"scans"
+					],
+					"query": [
+						{
+							"key": "projectId",
+							"value": "111"
+						},
+						{
+							"key": "last",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetScanDetailsById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Bearer}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json;v=1.0",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseURL}}sast/scans/1308021",
+					"host": [
+						"{{BaseURL}}sast"
+					],
+					"path": [
+						"scans",
+						"1308021"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostReport",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Bearer}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "cxOrigin",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;v=1.0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"reportType\": \"CSV\",\r\n  \"scanId\": 1308021\r\n}"
+				},
+				"url": {
+					"raw": "{{BaseURL}}reports/sastScan/",
+					"host": [
+						"{{BaseURL}}reports"
+					],
+					"path": [
+						"sastScan",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetReport",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{Bearer}}",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "cxOrigin",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json;v=1.0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BaseURL}}reports/sastScan/29260",
+					"host": [
+						"{{BaseURL}}reports"
+					],
+					"path": [
+						"sastScan",
+						"29260"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "Password",
+			"value": "HUeg5^V~9j.rg,.3"
+		}
+	]
+}
